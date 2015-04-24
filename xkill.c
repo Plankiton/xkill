@@ -55,7 +55,7 @@ static char *ProgramName;
 #define SelectButtonAny (-1)
 #define SelectButtonFirst (-2)
 
-static int parse_button ( char *s, int *buttonp );
+static int parse_button ( const char *s, int *buttonp );
 static XID get_window_id ( Display *dpy, int screen, int button, const char *msg );
 static int catch_window_errors ( Display *dpy, XErrorEvent *ev );
 static int kill_all_windows ( Display *dpy, int screenno, Bool top );
@@ -240,22 +240,11 @@ main(int argc, char *argv[])
 }
 
 static int 
-parse_button(char *s, int *buttonp)
+parse_button(const char *s, int *buttonp)
 {
-    register char *cp;
+    const char *cp;
 
-    /* lower case name */
-    for (cp = s; *cp; cp++) {
-	if (isascii (*cp) && isupper (*cp)) {
-#ifdef _tolower
-	    *cp = (char) _tolower (*cp);
-#else
-	    *cp = (char) tolower (*cp);
-#endif /* _tolower */
-	}
-    }
-
-    if (strcmp (s, "any") == 0) {
+    if (strcasecmp (s, "any") == 0) {
 	*buttonp = SelectButtonAny;
 	return (1);
     }
